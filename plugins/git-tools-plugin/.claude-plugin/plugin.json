@@ -4,13 +4,10 @@
   "version": "1.0.0",
   "author": {
     "name": "WeilinDev Team",
-    "email": "[email protected]"
+    "email": "tawilliam527824@gmail.com"
   },
-  "homepage": "https://github.com/weilindev/weilindev-marketplace",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/weilindev/weilindev-marketplace.git"
-  },
+  "homepage": "https://github.com/weilindev/agents",
+  "repository": "https://github.com/weilindev/agents",
   "license": "MIT",
   "keywords": ["git", "commit", "version-control", "conventional-commits"],
   "commands": [

@@ -128,8 +128,7 @@ MIT License - 詳見 LICENSE 文件
 
 ## 📧 聯絡方式
 
-- Email: [email protected]
-- GitHub: https://github.com/weilindev/weilindev-marketplace
+- Email: tawilliam527824@gmail.com
 
 ---
 
