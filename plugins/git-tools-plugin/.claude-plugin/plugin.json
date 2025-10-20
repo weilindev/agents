@@ -13,5 +13,7 @@
   },
   "license": "MIT",
   "keywords": ["git", "commit", "version-control", "conventional-commits"],
-  "category": "development"
+  "commands": [
+    "./commands/commit.md"
+  ]
 }

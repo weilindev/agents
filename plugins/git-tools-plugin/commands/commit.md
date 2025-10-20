@@ -1,5 +1,5 @@
 ---
-description: 建立格式良好的 Git commit，使用 conventional commits 和 emoji
+description: 建立格式良好的 Git commit，使用 conventional commits 格式
 ---
 
 請協助使用者建立高品質的 Git commit。執行以下步驟：
@@ -34,48 +34,26 @@ description: 建立格式良好的 Git commit，使用 conventional commits 和 
 
 ## 4. 建立 Commit 訊息
 
-使用 **Conventional Commits** 格式並加上適當的 **emoji**：
+使用 **Conventional Commits** 格式：
 
-### Commit 類型和 Emoji 對照
+### Commit 類型說明
 
-- ✨ `feat`: 新功能
-- 🐛 `fix`: Bug 修復
-- 📝 `docs`: 文件變更
-- 💄 `style`: 程式碼格式調整（不影響功能）
-- ♻️ `refactor`: 重構（既非新功能也非 bug 修復）
-- ⚡️ `perf`: 效能改善
-- ✅ `test`: 測試相關
-- 🔧 `chore`: 建置工具、設定檔等
-- 🚀 `ci`: CI/CD 改善
-- 🔥 `refactor`: 移除程式碼或檔案
-- 🚑️ `fix`: 緊急修復（Critical hotfix）
-- 🎨 `style`: 改善程式碼結構或格式
-- 🚚 `refactor`: 移動或重新命名檔案
-- 📦️ `chore`: 更新編譯後的檔案或套件
-- ➕ `chore`: 新增依賴
-- ➖ `chore`: 移除依賴
-- 🔒️ `fix`: 修復安全問題
-- 🩹 `fix`: 非關鍵問題的簡單修復
-- 🥅 `fix`: 捕捉錯誤
-- 💚 `fix`: 修復 CI 建置
-- 🏷️ `feat`: 新增或更新型別定義
-- 💬 `feat`: 新增或更新文字和字面量
-- 🌐 `feat`: 國際化和在地化
-- 🚸 `feat`: 改善使用者體驗/可用性
-- 🎉 `chore`: 開始專案
-- 🔖 `chore`: 發布/版本標籤
-- 🚧 `wip`: 進行中的工作
-- ♿️ `feat`: 改善無障礙功能
-- 💥 `feat`: 引入破壞性變更
-- 📄 `chore`: 新增或更新授權條款
-- 🗃️ `db`: 資料庫相關變更
-- 🔊 `feat`: 新增或更新日誌
-- 🔇 `fix`: 移除日誌
+- `feat`: 新功能
+- `fix`: Bug 修復
+- `docs`: 文件變更
+- `style`: 程式碼格式調整（不影響功能）
+- `refactor`: 重構（既非新功能也非 bug 修復）
+- `perf`: 效能改善
+- `test`: 測試相關
+- `chore`: 建置工具、設定檔等
+- `ci`: CI/CD 改善
+- `build`: 建置系統或外部依賴變更
+- `revert`: 回復先前的 commit
 
 ### Commit 訊息格式
 
 ```
-<emoji> <type>: <簡短描述>
+<type>: <簡短描述>
 
 <可選的詳細說明>
 ```
@@ -93,7 +71,7 @@ description: 建立格式良好的 Git commit，使用 conventional commits 和 
 
 ```bash
 git commit -m "$(cat <<'EOF'
-✨ feat: add user authentication system
+feat: add user authentication system
 
 Implement JWT-based authentication with login and logout endpoints
 EOF
@@ -121,13 +99,13 @@ EOF
 ## 範例
 
 良好的 commit 訊息：
-- ✨ feat: add user authentication system
-- 🐛 fix: resolve memory leak in rendering process
-- 📝 docs: update API documentation with new endpoints
-- ♻️ refactor: simplify error handling logic in parser
-- 🚨 fix: resolve linter warnings in component files
-- 🚑️ fix: patch critical security vulnerability in auth flow
-- 🎨 style: reorganize component structure for better readability
-- 🏷️ feat: add TypeScript type definitions for API
-- 💚 fix: resolve failing CI pipeline tests
-- 🔒️ fix: strengthen password requirements
+- feat: add user authentication system
+- fix: resolve memory leak in rendering process
+- docs: update API documentation with new endpoints
+- refactor: simplify error handling logic in parser
+- fix: resolve linter warnings in component files
+- fix: patch critical security vulnerability in auth flow
+- style: reorganize component structure for better readability
+- feat: add TypeScript type definitions for API
+- fix: resolve failing CI pipeline tests
+- fix: strengthen password requirements
