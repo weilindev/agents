@@ -3,7 +3,7 @@
   "description": "Git 工具插件：提供智慧 commit 訊息產生、程式碼審查等 Git 相關功能",
   "version": "1.0.0",
   "author": {
-    "name": "WeilinDev Team",
+    "name": "weilindev",
     "email": "tawilliam527824@gmail.com"
   },
   "homepage": "https://github.com/weilindev/agents",
