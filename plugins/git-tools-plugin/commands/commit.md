@@ -16,7 +16,8 @@ description: 建立格式良好的 Git commit，使用 conventional commits 格�
 - 執行 `git status` 查看哪些檔案被 stage
 - 如果沒有檔案被 stage，自動執行 `git add .` 加入所有變更
 - 執行 `git diff --staged` 了解變更內容
-- 執行 `git log --oneline -10` 查看最近的 commit 訊息風格
+- 執行 `git log --oneline -20` 查看最近的 commit 訊息風格
+- **重要：分析歷史 commit 訊息使用的語言**（例如：中文、英文、日文等），並在後續步驟中使用相同語言
 
 ## 3. 分析變更
 
@@ -60,10 +61,11 @@ description: 建立格式良好的 Git commit，使用 conventional commits 格�
 
 ### 訊息撰寫原則
 
-1. **使用現在式、祈使語氣**：例如 "add feature" 而非 "added feature"
-2. **首行保持簡潔**：不超過 72 字元
-3. **描述「為什麼」而非「什麼」**：diff 已經顯示了「什麼」變更了
-4. **每個 commit 應該是原子性的**：代表單一目的的相關變更
+1. **使用與歷史 commit 相同的語言**：分析 `git log` 的結果，使用 repository 慣用的語言撰寫訊息
+2. **使用現在式、祈使語氣**：例如中文「新增功能」或英文 "add feature"（而非「已新增」或 "added feature"）
+3. **首行保持簡潔**：不超過 72 字元
+4. **描述「為什麼」而非「什麼」**：diff 已經顯示了「什麼」變更了
+5. **每個 commit 應該是原子性的**：代表單一目的的相關變更
 
 ## 5. 執行 Commit
 
@@ -98,14 +100,18 @@ EOF
 
 ## 範例
 
-良好的 commit 訊息：
+良好的 commit 訊息（請根據專案慣用語言調整）：
+
+**英文範例：**
 - feat: add user authentication system
 - fix: resolve memory leak in rendering process
 - docs: update API documentation with new endpoints
 - refactor: simplify error handling logic in parser
-- fix: resolve linter warnings in component files
-- fix: patch critical security vulnerability in auth flow
-- style: reorganize component structure for better readability
-- feat: add TypeScript type definitions for API
-- fix: resolve failing CI pipeline tests
-- fix: strengthen password requirements
+
+**中文範例：**
+- feat: 新增使用者認證系統
+- fix: 修復渲染過程中的記憶體洩漏
+- docs: 更新 API 文件與新端點
+- refactor: 簡化解析器中的錯誤處理邏輯
+
+**注意：務必先檢查 `git log` 來決定應該使用哪種語言！**
