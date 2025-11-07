@@ -10,7 +10,7 @@
       "name": "git-tools-plugin",
       "source": "./plugins/git-tools-plugin",
       "description": "Git 工具插件：提供智慧 commit 訊息產生、程式碼審查等 Git 相關功能",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "weilindev"
       },
