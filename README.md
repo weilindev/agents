@@ -30,21 +30,6 @@
 
 ## 🔌 可用插件
 
-### Git Tools Plugin
-
-**功能：** Git 工具插件，提供智慧化的 Git 操作功能
-
-**包含：**
-- `/commit` - 智慧 Commit 產生器，使用 Conventional Commits 和 emoji
-- 自動預檢查（lint、build）
-- 智慧分析變更並建議拆分 commit
-- 安全保護機制
-
-**安裝：**
-```bash
-/plugin install git-tools-plugin@weilindev
-```
-
 ### Comment Cleanup
 
 **功能：** 以第一性原理審查並清理 code 註解，只留下讀者無法從 code 本身得知的資訊
@@ -68,12 +53,6 @@ agents/
 ├── .claude-plugin/
 │   └── marketplace.json                  # Marketplace 配置文件
 ├── plugins/
-│   ├── git-tools-plugin/                 # Git 工具插件
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json               # 插件元數據
-│   │   ├── commands/
-│   │   │   └── commit.md                 # 智慧 commit 產生器
-│   │   └── README.md                     # 插件說明文件
 │   └── comment-cleanup/                  # 註解清理插件
 │       ├── .claude-plugin/
 │       │   └── plugin.json               # 插件元數據
