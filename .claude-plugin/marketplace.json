@@ -1,5 +1,5 @@
 {
-  "name": "weilindev/agents",
+  "name": "weilindev",
   "owner": {
     "name": "weilindev",
     "email": "tawilliam527824@gmail.com"
@@ -7,15 +7,18 @@
   "description": "weilindev official Claude Code plugin marketplace",
   "plugins": [
     {
-      "name": "git-tools-plugin",
-      "source": "./plugins/git-tools-plugin",
-      "description": "Git 工具插件：提供智慧 commit 訊息產生、程式碼審查等 Git 相關功能",
-      "version": "1.0.1",
+      "name": "comment-cleanup",
+      "source": "./plugins/comment-cleanup",
+      "description": "以第一性原理審查並清理 code 註解：刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，產出一份可以不看就 merge 的純註解 diff。",
+      "version": "1.0.0",
       "author": {
         "name": "weilindev"
       },
-      "keywords": ["git", "commit", "version-control", "conventional-commits"],
+      "keywords": ["comments", "code-quality", "cleanup", "refactoring", "code-review"],
       "category": "development"
     }
-  ]
+  ],
+  "renames": {
+    "git-tools-plugin": null
+  }
 }

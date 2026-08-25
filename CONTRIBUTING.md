@@ -91,9 +91,12 @@
    使用 Claude Code 測試你的插件：
 
    ```bash
-   # 在你的專案目錄中
-   /plugin marketplace add file:///path/to/your/weilindev-marketplace
-   /plugin install your-plugin-name
+   # 開發期間直接載入，不必先安裝
+   claude --plugin-dir ./plugins/your-plugin-name
+
+   # 或掛上本地市場後安裝
+   /plugin marketplace add file:///path/to/your/agents
+   /plugin install your-plugin-name@weilindev
    ```
 
 8. **提交 Pull Request**

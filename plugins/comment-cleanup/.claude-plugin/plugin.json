@@ -1,0 +1,17 @@
+{
+  "name": "comment-cleanup",
+  "version": "1.0.0",
+  "description": "以第一性原理審查並清理 code 註解，只留下讀者無法從 code 本身得知的資訊。只改註解不改 code。",
+  "author": {
+    "name": "weilindev",
+    "email": "tawilliam527824@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "comments",
+    "code-quality",
+    "cleanup",
+    "refactoring",
+    "code-review"
+  ]
+}
