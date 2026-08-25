@@ -9,13 +9,13 @@
 在 Claude Code 中執行以下命令來新增這個市場：
 
 ```bash
-/plugin marketplace add weilindev/weilindev-marketplace
+/plugin marketplace add weilindev/agents
 ```
 
 或者如果你使用 Git URL：
 
 ```bash
-/plugin marketplace add https://github.com/weilindev/weilindev-marketplace.git
+/plugin marketplace add https://github.com/weilindev/agents.git
 ```
 
 ### 瀏覽和安裝插件
@@ -42,22 +42,45 @@
 
 **安裝：**
 ```bash
-/plugin install git-tools-plugin
+/plugin install git-tools-plugin@weilindev
+```
+
+### Comment Cleanup
+
+**功能：** 以第一性原理審查並清理 code 註解，只留下讀者無法從 code 本身得知的資訊
+
+**包含：**
+- `/comment-cleanup:comment-cleanup` - 註解審查與清理
+- 鐵則：只改註解不改 code，產出可以不看就 merge 的純註解 diff
+- 兩道判準：看 code 能不能懂／是不是過程與轉折
+- 保護有功能的註解（eslint-disable、授權標頭、對外 SDK JSDoc 等）
+- 回報清單確認後才套用
+
+**安裝：**
+```bash
+/plugin install comment-cleanup@weilindev
 ```
 
 ## 📁 專案結構
 
 ```
-weilindev-marketplace/
+agents/
 ├── .claude-plugin/
-│   └── marketplace.json          # Marketplace 配置文件
+│   └── marketplace.json                  # Marketplace 配置文件
 ├── plugins/
-│   └── git-tools-plugin/         # Git 工具插件
+│   ├── git-tools-plugin/                 # Git 工具插件
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json               # 插件元數據
+│   │   ├── commands/
+│   │   │   └── commit.md                 # 智慧 commit 產生器
+│   │   └── README.md                     # 插件說明文件
+│   └── comment-cleanup/                  # 註解清理插件
 │       ├── .claude-plugin/
-│       │   └── plugin.json       # 插件元數據
-│       ├── commands/
-│       │   └── commit.md         # 智慧 commit 產生器
-│       └── README.md             # 插件說明文件
+│       │   └── plugin.json               # 插件元數據
+│       ├── skills/
+│       │   └── comment-cleanup/
+│       │       └── SKILL.md              # 註解審查與清理規則
+│       └── README.md                     # 插件說明文件
 └── README.md
 ```
 
@@ -70,8 +93,11 @@ weilindev-marketplace/
 ```
 my-plugin/
 ├── .claude-plugin/
-│   └── plugin.json              # 必需：插件元數據
-├── commands/                     # 可選：自訂指令
+│   └── plugin.json              # 可選：插件元數據
+├── skills/                       # 建議：技能（新插件用這個）
+│   └── my-skill/
+│       └── SKILL.md
+├── commands/                     # 可選：舊式扁平指令檔（legacy）
 │   └── my-command.md
 ├── agents/                       # 可選：自訂代理
 │   └── my-agent.md
@@ -98,15 +124,22 @@ my-plugin/
 ### 將插件加入市場
 
 1. 在 `plugins/` 目錄中建立你的插件
-2. 更新 `.claude-plugin/marketplace.json`，將你的插件加入 `plugins` 陣列
-3. 提交並推送到你的 Git 倉庫
+2. 更新 `.claude-plugin/marketplace.json`，將你的插件加入 `plugins` 陣列（`version` 要與 `plugin.json` 一致）
+3. 驗證兩層 manifest：
+
+   ```bash
+   claude plugin validate .
+   claude plugin validate ./plugins/my-plugin --strict
+   ```
+
+4. 提交並推送到你的 Git 倉庫
 
 ## 📚 相關文檔
 
-- [Claude Code 官方文檔](https://docs.claude.com/en/docs/claude-code)
-- [Plugin 開發指南](https://docs.claude.com/en/docs/claude-code/plugins)
-- [Plugin Marketplace 文檔](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces)
-- [MCP Server 文檔](https://docs.claude.com/en/docs/claude-code/mcp)
+- [Claude Code 官方文檔](https://code.claude.com/docs/en/overview)
+- [Plugin 開發指南](https://code.claude.com/docs/en/plugins)
+- [Plugin Marketplace 文檔](https://code.claude.com/docs/en/plugin-marketplaces)
+- [MCP Server 文檔](https://code.claude.com/docs/en/mcp)
 
 ## 🤝 貢獻
 
