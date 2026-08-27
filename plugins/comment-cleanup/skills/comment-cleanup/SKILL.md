@@ -9,7 +9,7 @@ description: 以第一性原理審查並清理 code 註解，刪除翻譯型、�
 
 判準與流程都在 subagent 那邊（`${CLAUDE_PLUGIN_ROOT}/skills/comment-cleanup/rules.md` 與 `${CLAUDE_PLUGIN_ROOT}/agents/comment-cleanup.md`），你不需要讀，也不要把它們的內容抄進派工 prompt。
 
-只有一條路徑：**派工 → 等回報 → 轉述**。沒有互動確認版本，不要自己開清單問使用者要刪哪些——安全性押在機械閘門與單一可 revert 的 commit 上，不押在人工逐條核可。
+只有一條路徑：**派工 → 等回報 → 轉述**。沒有互動確認版本，不要自己開清單問使用者要刪哪些——安全性押在機械閘門與可還原的快照上，不押在人工逐條核可。
 
 ## 派工前先確認 base 分支
 

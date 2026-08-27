@@ -34,7 +34,7 @@
 
 ## 執行方式
 
-只有一條路徑：skill 收到你的請求後**派 `comment-cleanup` subagent**，subagent 清理、過閘門、落 commit，再把結果轉述回來。沒有「先開清單問你要刪哪些」的版本 —— 安全性押在機械閘門與單一可 revert 的 commit 上，不押在人工逐條核可。
+只有一條路徑：skill 收到你的請求後**派 `comment-cleanup` subagent**，subagent 清理、過閘門，再把結果轉述回來。沒有「先開清單問你要刪哪些」的版本 —— 安全性押在機械閘門與可還原的快照上，不押在人工逐條核可。
 
 想背景跑就明講「背景跑」，skill 會用 `run_in_background` 派工。
 
@@ -85,7 +85,7 @@ C 家族（js/ts/java/go/rust/swift/kt/cs/php…）、JSX/TSX（含 `{/* */}`）
 
 | 檔案 | 職責 |
 | --- | --- |
-| `skills/comment-cleanup/SKILL.md` | 入口。只負責檢查前置條件、派工、轉述結果，不含判準也不自己清理 |
+| `skills/comment-cleanup/SKILL.md` | 入口。只負責確認 base 分支、派工、轉述結果，不含判準也不自己清理 |
 | `skills/comment-cleanup/rules.md` | 判準的唯一來源：鐵則、兩道判準、刪留分類、範圍怎麼定 |
 | `agents/comment-cleanup.md` | 執行流程：前置條件、分層、閘門、驗證、commit、報告 |
 
