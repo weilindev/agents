@@ -1,84 +1,47 @@
 ---
 name: comment-cleanup
-description: 以第一性原理審查並清理 code 註解，刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，產出一份純註解變動的 diff。用於開發告一段落、commit 或開 PR 之前。使用者說「清理註解」「comment cleanup」「註解太多」「審一下註解」時觸發。
+description: 以第一性原理審查並清理 code 註解，刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，通過機械閘門才留下改動；工作區乾淨時落成單獨一顆 commit，否則套用後交給使用者一起 commit。不需要逐條確認。用於開發告一段落、commit 或開 PR 之前。使用者說「清理註解」「comment cleanup」「註解太多」「審一下註解」時觸發。
 ---
 
 # 註解清理
 
-## 鐵則：只改註解，不改 code
+**你自己不執行清理。這個 skill 唯一的動作是派 `comment-cleanup` subagent。**
 
-**這條凌駕本文所有其他規則。** 一行可執行的 code 都不准動——不改名、不抽函式、不調順序、不補型別、不「順手」修 bug，即使那是對的。
+判準與流程都在 subagent 那邊（`${CLAUDE_PLUGIN_ROOT}/skills/comment-cleanup/rules.md` 與 `${CLAUDE_PLUGIN_ROOT}/agents/comment-cleanup.md`），你不需要讀，也不要把它們的內容抄進派工 prompt。
 
-發現該改的 code，**寫進報告，不動手**。使用者要的是一份只含註解變動的 diff；夾帶 code 變更會讓這份 diff 失去「可以不看就 merge」的價值。
+只有一條路徑：**派工 → 等回報 → 轉述**。沒有互動確認版本，不要自己開清單問使用者要刪哪些——安全性押在機械閘門與可還原的快照上，不押在人工逐條核可。
 
-驗收方式：套用後 `git diff` 的每一個 `+`／`-` 行都必須是註解行或空行。有一行不是，就是做壞了。
+## 派工前先確認 base 分支
 
-## 兩道判準
+repo 的 CLAUDE.md 有指定主幹就照它（例如 twhn* 系列是 `dev` 不是 `main`），沒指定才看 `git symbolic-ref refs/remotes/origin/HEAD`。
 
-每條註解過兩關，**任一關不過就刪**：
+**工作區不必乾淨**，有沒有 commit 過都能派——subagent 動手前會自己建快照，範圍是當前 branch 相對主幹的所有變更（含還沒 commit 的）。
 
-**一、看 code 能不能懂？** 能懂就刪。註解不該複述 code 已經說出口的事。
+## 派工
 
-**二、是不是過程與轉折？** 是就刪。「原本用 X 後來改 Y」「試過 A 但不行」「這裡以前有 bug」——這些確實不在 code 裡，但它們屬於 commit message 與 PR，不屬於 code。**留結論，不留推導。**
+用 Agent tool，`subagent_type: "comment-cleanup:comment-cleanup"`——plugin 提供的 agent 帶 plugin 前綴，前面是 plugin 名後面是 agent 名。可用清單裡只有不帶前綴的 `comment-cleanup` 就用那個。
 
-第二關容易漏判：因為那些資訊「code 裡真的看不到」，用第一關測會被誤判為該留。過程就是過程，寫得再有道理也是過程。
+subagent 看不到你的對話歷史，所以 prompt 要自含：
 
-還有一種情況：**「看 code 不好懂，但註解一補就懂了」** ——這代表 code 該改（改名、抽函式、拆條件式），但**依鐵則不動手**：註解暫時留著，把建議寫進報告交給使用者。刪掉註解卻沒改 code，只會讓那段變得更難讀。
+```
+清理這個 repo 本次 feature 的 code 註解。
+base 分支：<你確認的 base>
+範圍：<使用者指定的路徑；沒指定就寫「本次改動，自行用 git merge-base 定範圍」>
+使用者的額外要求：<原話；沒有就寫「無」>
+```
 
-預設立場是刪。**留下要說得出理由，刪除不必。** 註解刪了 git 隨時救得回來，不必為了保險而留。
+使用者明講要背景跑就 `run_in_background: true`，否則前景等它。
 
-## 一律刪除
+## 收到回報後
 
-- **翻譯型**：複述下一行。`// 建立使用者` 之於 `createUser()`
-- **型別重述**：`@param userId 使用者 ID` 這類把簽章抄一遍的 JSDoc
-- **章節標籤**：`// ---- 驗證 ----`。需要分段通常代表該拆函式——記進建議，本次只刪標籤
-- **註解掉的 code**：死 code 交給 git
-- **過程與轉折**：見判準二
-- **與 code 不符的**：過期就是錯的，比沒有更糟
-- **無主 TODO**：沒有 issue 編號或負責人的等於永不執行
+轉述這幾項，不要複述它的完整報告：
 
-## 值得留下
+- verdict：`COMMITTED`（附 sha）／`APPLIED`（套用了但沒 commit，工作區原本就有變更）／`REPORT-ONLY`（未過閘門，已還原）／`NOTHING-TO-DO`
+- 統計：刪 N 條、壓縮 M 條、留報告 K 條
+- 閘門與 typecheck/test 的實際結果
+- 報告檔與快照的絕對路徑
+- 沒被清到的 untracked 檔案（有的話）
+- 需要使用者接手的事：`建議改 code` 幾項、有沒有判不準而擱置的
 
-共通點：**讀者不知道就會改壞，而 code 與型別都攔不住他。**
-
-- **不變式**：什麼恆為真、什麼狀態不可能出現，違反會壞在哪
-- **反直覺的選擇**：為何不用那個看起來更簡單的做法——要有踩過的坑、量測數據或相容性限制撐著，只有「我覺得」就是過程
-- **外部依據**：第三方 bug、規格條文、平台限制。附得上出處（連結、commit hash、規格名稱），否則是傳說
-- **跨檔／跨 repo 的耦合**：這裡改了那裡要跟著改，型別系統管不到
-- **安全性理由**：為何這裡必須跳脫／驗證／不信任輸入
-- **演算法出處**：論文、公式、非顯而易見的邊界推導
-
-**留下的一併壓縮。** 一條註解超過兩行，通常是把推導也寫進去了——砍到剩結論。
-
-## 不可刪除的註解
-
-- 有功能的：`eslint-disable`、`@ts-expect-error`、`@ts-ignore`、`prettier-ignore`、`biome-ignore`、coverage/bundler pragma
-- 授權標頭、shebang、`/// <reference>`
-- **會被工具消費的**：對外 SDK 的公開 API JSDoc、被 OpenAPI/Swagger 生成器讀取的 schema 描述、產文件用的 docstring。動之前先確認這個 repo 有沒有這類管線（找 swagger / typedoc / openapi 設定）
-
-## 流程
-
-1. **定範圍**——預設本次改動：`git diff --stat $(git merge-base HEAD <base>)..HEAD`，base 取該 repo 的主幹分支。使用者指定路徑就照指定。**不要**擴大到整個 repo 清歷史遺留，除非明確要求。
-
-2. **先看鄰居**——讀同層既有檔案的註解密度。目標是對齊 repo 慣例，不是對齊這次新寫的 code。
-
-3. **逐條判定**——範圍內每一條註解給 `刪 / 留 / 壓縮 / 建議改 code`，各配一句理由，指向上面的判準。「感覺不需要」不算理由。`建議改 code` 是報告項目，不是動作。
-
-4. **回報再動手**——清單交給使用者確認後才套用（訊息含「直接改」「--apply」則跳過）：
-
-   ```
-   src/domain/organization.domain.ts
-     L33-34  刪    正整數判準的單一來源…  → 判準一，函式名 isPositiveInt 已說明
-     L83-85  壓縮  partnerConfig 與 orgType 同進退…  → 留不變式，砍後果推演（3行→1行）
-     L104    留    orgId 排在展開之後…  → 順序有安全後果，型別看不出來
-   ```
-
-   清單之外另附兩份：刪掉但對團隊有價值的內容（設計取捨、踩過的坑），寫成可直接貼進 commit message 或 PR 的版本；以及 `建議改 code` 的項目，寫成使用者事後可獨立執行的清單。
-
-5. **套用**——逐檔以精準字串替換只刪／改註解行。**不要跑 formatter 或 lint --fix**（`prettier --write`、`eslint --fix`、`pnpm style:fix` 之類）：那會重排 code、把無關變更混進 diff，直接違反鐵則。
-
-6. **驗證**——先 `git diff` 逐行確認每個 `+`／`-` 都是註解或空行；順手檢查沒有留下孤兒的 `/*` 或懸空的 `*/`。再跑該 repo 的 typecheck 與 test（讀 `package.json` scripts 或專案 CLAUDE.md 取得指令，挑不會改寫檔案的那些）。回報附實際執行結果，不以「我檢查過了」交差。
-
-## 唯一的例外
-
-**外部依據型**（判準見上）不確定時保留：那類資訊往往是團隊唯一的記載，重建要重新踩一次坑。其餘各類一律照判準砍，不必猶豫。
+`APPLIED` 時要讓使用者知道：變更在工作區等他一起 commit，要退回就從快照複製。
+`REPORT-ONLY` 時把原因講具體，並說明工作區已還原、沒有留下半套變更。

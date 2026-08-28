@@ -9,12 +9,18 @@
     {
       "name": "comment-cleanup",
       "source": "./plugins/comment-cleanup",
-      "description": "以第一性原理審查並清理 code 註解：刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，產出一份可以不看就 merge 的純註解 diff。",
-      "version": "1.0.0",
+      "description": "以第一性原理審查並清理 code 註解：刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code。由 comment-cleanup subagent 執行，範圍是當前 branch 相對主幹的所有變更（含還沒 commit 的），通過機械閘門才留下改動，不通過就從快照整批還原。不需要逐條確認。",
+      "version": "2.0.0",
       "author": {
         "name": "weilindev"
       },
-      "keywords": ["comments", "code-quality", "cleanup", "refactoring", "code-review"],
+      "keywords": [
+        "comments",
+        "code-quality",
+        "cleanup",
+        "refactoring",
+        "code-review"
+      ],
       "category": "development"
     }
   ],
