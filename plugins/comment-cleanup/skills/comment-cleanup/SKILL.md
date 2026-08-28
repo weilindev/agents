@@ -1,6 +1,7 @@
 ---
 name: comment-cleanup
 description: 以第一性原理審查並清理 code 註解，刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，通過機械閘門才留下改動；工作區乾淨時落成單獨一顆 commit，否則套用後交給使用者一起 commit。不需要逐條確認。用於開發告一段落、commit 或開 PR 之前。使用者說「清理註解」「comment cleanup」「註解太多」「審一下註解」時觸發。
+argument-hint: "[路徑或範圍]"
 ---
 
 # 註解清理
@@ -26,7 +27,7 @@ subagent 看不到你的對話歷史，所以 prompt 要自含：
 ```
 清理這個 repo 本次 feature 的 code 註解。
 base 分支：<你確認的 base>
-範圍：<使用者指定的路徑；沒指定就寫「本次改動，自行用 git merge-base 定範圍」>
+範圍：<使用者指定的路徑，含 `/comment-cleanup <路徑>` 帶進來的參數；沒指定就寫「本次改動，自行用 git merge-base 定範圍」>
 使用者的額外要求：<原話；沒有就寫「無」>
 ```
 
