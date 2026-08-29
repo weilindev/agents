@@ -4,7 +4,7 @@
     "name": "weilindev",
     "email": "tawilliam527824@gmail.com"
   },
-  "description": "weilindev official Claude Code plugin marketplace",
+  "description": "weilindev 個人工作流用的 Claude Code plugin marketplace",
   "plugins": [
     {
       "name": "comment-cleanup",
