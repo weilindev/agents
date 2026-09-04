@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "comment-cleanup",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "以第一性原理審查並清理 code 註解，只留下讀者無法從 code 本身得知的資訊。只改註解不改 code；由 subagent 執行，通過機械閘門才留下改動，工作區乾淨時落成單獨一顆 commit，否則交給使用者一起 commit。",
   "author": {
     "name": "weilindev",
