@@ -2,6 +2,8 @@
 name: comment-cleanup
 description: 以第一性原理審查並清理 code 註解，刪除翻譯型、冗餘、過期的註解，只留下讀者無法從 code 本身得知的資訊。鐵則是只改註解不改 code，通過機械閘門才留下改動；工作區乾淨時落成單獨一顆 commit，否則套用後交給使用者一起 commit。不需要逐條確認。用於開發告一段落、commit 或開 PR 之前。使用者說「清理註解」「comment cleanup」「註解太多」「審一下註解」時觸發。
 argument-hint: "[路徑或範圍]"
+model: sonnet
+effort: medium
 ---
 
 # 註解清理
@@ -35,13 +37,17 @@ base 分支：<你確認的 base>
 
 ## 收到回報後
 
-轉述這幾項，不要複述它的完整報告：
+subagent 的回報就是報告本身，不會落檔，你這裡是使用者唯一看得到它的地方。轉述以下幾項，其中 `壓縮` before/after、擱置理由、`建議改 code`、有價值的刪除內容四項要**原文照轉**，不要摘要：
 
 - verdict：`COMMITTED`（附 sha）／`APPLIED`（套用了但沒 commit，工作區原本就有變更）／`REPORT-ONLY`（未過閘門，已還原）／`NOTHING-TO-DO`
 - 統計：刪 N 條、壓縮 M 條、留報告 K 條
-- 閘門與 typecheck/test 的實際結果
-- 報告檔與快照的絕對路徑
+- 閘門與 typecheck/lint 的實際結果
+- 快照的絕對路徑
 - 沒被清到的 untracked 檔案（有的話）
+- 每一條 `壓縮` 的 before/after 原文
+- 擱置不動的條目與理由
+- `建議改 code` 清單
+- 刪掉但對團隊有價值的內容
 - 需要使用者接手的事：`建議改 code` 幾項、有沒有判不準而擱置的
 
 `APPLIED` 時要讓使用者知道：變更在工作區等他一起 commit，要退回就從快照複製。

@@ -44,7 +44,7 @@
 
 還原用快照而不是 `git checkout` —— 後者會把你自己還沒 commit 的變更一起洗掉。快照放在 git 目錄而不是 `/tmp`：工作區髒的時候沒有 commit 可以 revert，快照就是唯一的 undo，重開機不能消失。
 
-**二、機械閘門，不是自我保證。** 套用後跑 `scripts/verify-comment-diff.py --snapshot <快照路徑>`，它做兩件事：比對 `git status --porcelain` 確認 subagent 沒動到範圍外的檔案、也沒把你原有的變更洗掉；然後逐檔把註解與空行剝除，比對 code 是否逐行相同。任一項不過 → **從快照整批還原**，降級成 report-only，不准部分保留。閘門過了才跑 typecheck 與 test，失敗一樣還原。
+**二、機械閘門，不是自我保證。** 套用後跑 `scripts/verify-comment-diff.py --snapshot <快照路徑>`，它做兩件事：比對 `git status --porcelain` 確認 subagent 沒動到範圍外的檔案、也沒把你原有的變更洗掉；然後逐檔把註解與空行剝除，比對 code 是否逐行相同。任一項不過 → **從快照整批還原**，降級成 report-only，不准部分保留。閘門過了才跑 typecheck 與唯讀 lint，失敗一樣還原。不跑 test suite：閘門的盲點是刪掉 `@ts-expect-error`、`eslint-disable` 這類有功能的註解，typecheck 與 lint 就能抓到，test 沒有額外覆蓋卻最耗時。
 
 閘門有一個已知盲點：刪掉 `@ts-expect-error`、`eslint-disable` 這類有功能的註解，它看到的仍然是註解行，攔不住 —— 那一層由 typecheck 與 lint 補。
 
@@ -65,7 +65,7 @@
 
 **還沒 `git add` 過的新檔案不在範圍內**（`git diff` 只看 tracked 檔案），它們的註解不會被清。這是刻意的，但不會靜默跳過：回報裡會列出偵測到的 untracked 檔案。
 
-完整報告寫到 `$(git rev-parse --git-common-dir)/comment-cleanup/report-<時間戳>.md` —— 在 git 目錄底下，不污染工作區也不會被閘門判成範圍外變更。用 `--git-common-dir` 而不是寫死 `.git/`，是因為 linked worktree 的 `.git` 是檔案不是目錄；指向主 repo 也讓報告與快照在 worktree 被移除後還留著。
+完整報告不落檔，全部放在 subagent 的回報裡再由主 session 原文轉給你 —— Claude Code 本來就擋 subagent 寫報告檔，而且改動本身 `git diff` 看得到，留檔沒有額外價值。快照是唯一寫進 git 目錄的東西，路徑在 `$(git rev-parse --git-common-dir)/comment-cleanup/` 底下。用 `--git-common-dir` 而不是寫死 `.git/`，是因為 linked worktree 的 `.git` 是檔案不是目錄；指向主 repo 也讓快照在 worktree 被移除後還留著。
 
 ### 閘門的測試
 
